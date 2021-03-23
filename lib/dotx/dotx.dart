@@ -38,20 +38,20 @@ part 'widgets/dotx_painter.dart';
 
 class DotX extends StatefulWidget {
   DotX({
-    Key key,
+    Key? key,
     this.dotWidget,
     this.color,
-    this.pageController,
-    this.space,
-    @required this.pageCount,
+    required this.pageController,
+    required this.space,
+    required this.pageCount,
     this.radius = 50,
   }) : super(key: key);
 
   /// default indicator of page
-  final Widget dotWidget;
+  final Widget? dotWidget;
 
   /// selected page indicator color
-  final Color color;
+  final Color? color;
 
   /// should be provided due to normal work of [DotX]
   /// it will help swapping process of dots
@@ -71,23 +71,13 @@ class DotX extends StatefulWidget {
 }
 
 class _DotXState extends State<DotX> {
-  int _currentPage = 0;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     widget.pageController.addListener(() {
-      print('yay!');
-      final page = widget.pageController.page.round();
-
-      print('page: $page');
-
-      if (page != _currentPage) {
-        setState(() {
-          _currentPage = page;
-        });
-      }
+      print('${widget.pageController.page}');
+      setState(() {});
     });
   }
 

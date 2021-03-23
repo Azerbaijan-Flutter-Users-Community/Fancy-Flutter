@@ -36,7 +36,7 @@ import 'package:flutter/material.dart';
 import 'dotx.dart';
 
 class DotXExamplePage extends StatefulWidget {
-  DotXExamplePage({Key key}) : super(key: key);
+  DotXExamplePage({Key? key}) : super(key: key);
 
   @override
   _DotXExamplePageState createState() => _DotXExamplePageState();

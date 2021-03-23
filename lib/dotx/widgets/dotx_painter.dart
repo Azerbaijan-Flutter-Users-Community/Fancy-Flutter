@@ -36,13 +36,11 @@ part of '../dotx.dart';
 
 class DotXPainter extends CustomPainter {
   DotXPainter({
-    @required this.context,
-    @required this.pageController,
-    @required this.pageCount,
+    required this.context,
+    required this.pageController,
+    required this.pageCount,
     this.space = 10.0,
-  })  : assert(context != null),
-        assert(pageController != null),
-        assert(pageCount != null);
+  });
 
   final BuildContext context;
   final PageController pageController;
@@ -64,27 +62,54 @@ class DotXPainter extends CustomPainter {
     if (availableSpace >= occupiedSpace) {
       final startX = (availableSpace - occupiedSpace) / 2 + 10 + radius;
 
-      int page = pageController.page.round();
+      double page = pageController.page!;
 
       for (int i = 0; i < pageCount; i++) {
         final cx = startX + i * (space + radius * 2);
 
-        print('painter page: $page');
-
-        canvas.drawCircle(
-          Offset(cx, size.height / 2),
-          radius,
-          paint
-            ..color = Theme.of(context).primaryColor
-            ..style = page == i ? PaintingStyle.fill : PaintingStyle.stroke,
-        );
+        _paintDot(canvas, radius, Offset(cx, radius / 2));
+        // canvas.drawCircle(
+        //   Offset(cx, size.height / 2),
+        //   radius,
+        //   paint
+        //     ..color = Theme.of(context).primaryColor
+        //     ..style = page == i ? PaintingStyle.fill : PaintingStyle.stroke,
+        // );
       }
+
+      _paintOverlayDot(
+        canvas,
+        radius,
+        Offset(startX + page * (2 * radius + space), radius / 2),
+      );
     } else {
       throw Exception(
         'There is no available space to draw dots!'
         ' available space: $availableSpace, occupiedSpace: $occupiedSpace',
       );
     }
+  }
+
+  void _paintOverlayDot(Canvas canvas, double radius, Offset center) {
+    canvas.drawOval(
+      Rect.fromCircle(center: center, radius: radius + 2),
+      Paint()..color = Colors.blue,
+    );
+  }
+
+  void _paintDot(Canvas canvas, double radius, Offset center) {
+    canvas
+      ..drawOval(
+        Rect.fromCircle(center: center, radius: radius - radius * 0.2 + 2),
+        Paint()..color = Colors.grey.withOpacity(0.3),
+      )
+      ..drawOval(
+        Rect.fromCircle(center: center, radius: radius),
+        Paint()
+          ..color = Colors.grey.withOpacity(0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
   }
 
   @override
